@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Available WiFi Networks</h1>
+    <button id="scanButton">Scan for Networks</button>
+    <ul id="networks"></ul>
+
+    <script>
+        document.getElementById('scanButton').addEventListener('click', function() {
+            fetch('/scan')
+                .then(response => response.json())
+                .then(data => {
+                    const networkList = document.getElementById('networks');
+                    networkList.innerHTML = '';
+                    data.forEach(network => {
+                        const li = document.createElement('li');
+                        li.textContent = `SSID: ${network.ssid}, Signal: ${network.signal}`;
+                        networkList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
